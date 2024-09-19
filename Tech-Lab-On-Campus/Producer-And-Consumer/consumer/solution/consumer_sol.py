@@ -22,9 +22,8 @@ class mqConsumer(mqConsumerInterface):
         con_params = pika.URLParameters(os.environ["AMQP_URL"])
         connection = pika.BlockingConnection(parameters=con_params)
         self.channel = connection.channel()
+        exchange = self.channel.exchange_declare(exchange=self.exchange_name)
         self.channel.queue_declare(queue=self.queue_name)
-        self.channel.exchange_declare(
-        exchange=self.exchange_name, exchange_type="topic")
         self.channel.queue_bind(queue= self.queue_name,
         routing_key= self.binding_key,
         exchange=self.exchange_name,
